@@ -1,0 +1,11 @@
+.social-icons {
+    gap: 5px;
+}
+
+.fb,.twt,.lkd {
+    cursor: pointer;
+}
+
+.twt {
+    padding-inline: 5px;
+}

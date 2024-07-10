@@ -1,0 +1,10 @@
+.home-page-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.pagination-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
