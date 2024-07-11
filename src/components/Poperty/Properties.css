@@ -1,0 +1,17 @@
+.title-cont {
+    display: flex;
+    align-items: center;
+    gap:5px;
+    font-size: var(--font-size-primary) !important;
+    font-weight: 500;
+    color: var(--logo-desc-font-color);
+}
+
+.prop-img {
+    height: 16px;
+    width: 16px;
+}
+
+.prop-desc-text {
+    font-size: 14px !important;
+}

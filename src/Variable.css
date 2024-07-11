@@ -1,6 +1,12 @@
 :root {
     --primary-font-color: #6C2BD9;
     --secondary-font-color: #6B7280;
+    --logo-desc-font-color: #64748B;
 
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #f6f6f4;
+
+    --font-size-primary : 11px;
+    --font-size-secondary: 13px;
 
 }

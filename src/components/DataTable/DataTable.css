@@ -2,10 +2,57 @@
     gap: 5px;
 }
 
-.fb,.twt,.lkd {
+.rows-count-label{
+    color:#334155;
+    font-weight: 500;
+}
+
+.bttn-and-count{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    font-size: var(--font-size-secondary) !important;
+    background-color: var(--bg-primary) !important;
+}
+
+.table-bttns{
+    text-transform: none !important;
+    font-size: var(--font-size-primary) !important;
+    width: max-content !important;
+    color: var(--secondary-font-color) !important;
+    border-color: #ECECEC !important;
+    background-color: var(--bg-primary) !important;
+}
+#export-csv-btn{
+    gap: 5px;
+}
+.table-heading{
+    font-size: var(--font-size-primary) !important;
+    font-weight: 600 !important;
+    color: var(--secondary-font-color) !important;
+}
+
+.fb,
+.twt,
+.lkd,
+#company {
     cursor: pointer;
 }
 
 .twt {
     padding-inline: 5px;
+}
+
+#company,
+#email,
+#ph-no {
+    color: var(--primary-font-color);
+}
+#desc,#address{
+    color: var(--secondary-font-color) !important;
+}
+
+.css-1ex1afd-MuiTableCell-root{
+    font-size: var(--font-size-primary) !important;
 }

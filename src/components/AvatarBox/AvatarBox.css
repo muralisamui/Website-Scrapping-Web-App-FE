@@ -1,0 +1,17 @@
+.avatar-cont-body {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 30px;
+}
+
+.avatar-img {
+    height: 152px !important;
+    width: 152px !important;
+    border-radius: 5px !important;
+}
+
+.cmpny-name-lbl{
+    font-weight: 600 !important;
+    color:#374151 !important;
+}

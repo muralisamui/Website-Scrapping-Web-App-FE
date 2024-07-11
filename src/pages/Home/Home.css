@@ -1,10 +1,32 @@
-.home-page-cont{
+.home-page-cont {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 5px;
+    background-color: var(--bg-secondary);
 }
+
 .pagination-container {
     display: flex;
     align-items: center;
     gap: 10px;
+    width: auto;
+    padding: 16px;
+}
+
+.pagination-text,
+.pagination-count {
+    font-size: var(--font-size-secondary) !important;
+    color: var(--secondary-font-color) !important;
+}
+
+.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root {
+    color: var(--secondary-font-color) !important;
+}
+
+@media (max-width: 768px) {
+    .pagination-container {
+        display: flex;
+        flex-direction: column;
+        width: auto;
+    }
 }
