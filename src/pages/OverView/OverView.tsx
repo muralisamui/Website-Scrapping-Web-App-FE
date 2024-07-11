@@ -25,11 +25,11 @@ const OverView = () => {
             />
           </Paper>
         </Grid>
-        <Grid item xs={isMobile ? 12 : 4}>
+        <Grid item xs={isMobile ? 12 : 3.5}>
           <Paper>
             <CompanyDetail
               website={'djshdgvjshfs'}
-              desc={'djshdgvjshfs'}
+              desc={'Watch Netflix movies & TV shows online or stream right to your smart TV, game console, PC, Mac, mobile, tablet and more.'}
               email={'djshdgvjshfs'}
               fbURL={'djshdgvjshfs'}
               instaURL={'djshdgvjshfs'}
@@ -39,7 +39,7 @@ const OverView = () => {
             />
           </Paper>
         </Grid>
-        <Grid item xs={isMobile ? 12 : 8}>
+        <Grid item xs={isMobile ? 12 : 8.5}>
           <Paper className='cmpny-scrnsht-cont'>
             <Typography className="cmpny-title-cont">
               <img src={Camera} className="prop-img"></img>
