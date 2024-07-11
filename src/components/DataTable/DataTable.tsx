@@ -11,9 +11,10 @@ import Facebook from '../../assets/Facebook.svg'
 import Twitter from '../../assets/Twitter.svg'
 import LinkedIn from '../../assets/LinkedIn.svg'
 import CoptToClipboard from '../../assets/CoptToClipboard.svg'
+import ExportCSV from '../../assets/ExportCSV.svg'
+import DummyCompLogo from '../../assets/DummyCompLogo.png'
 import './DataTable.css'
 import { trimString, useCopyToClipboard } from '../../hooks/hooks';
-import ExportCSV from '../../assets/ExportCSV.svg'
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../routes/routes';
 
@@ -41,11 +42,7 @@ const rows = [
 
 const columnsHeadings = ['COMPANY', 'SOCIAL PROFILES', 'DESCRIPTION', 'ADDRESS', 'PHONE NO.', 'EMAIL']
 
-interface DataTableProps{
-    setShowNavigation?: (value: boolean) => void;
-}
-
-const DataTable:React.FC<DataTableProps> = ({setShowNavigation}) => {
+const DataTable = () => {
     const [selectedRows, setSelectedRows] = useState(new Set());
     const { copyToClipboard, renderAlert } = useCopyToClipboard();
     const navigate = useNavigate()
@@ -85,7 +82,7 @@ const DataTable:React.FC<DataTableProps> = ({setShowNavigation}) => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead sx={{ backgroundColor: '#F9FAFB' }}>
                         <TableRow>
-                            <TableCell align="left">
+                            <TableCell align="left" className='check-box-cell'>
                                 <Checkbox
                                     indeterminate={selectedRows.size > 0 && selectedRows.size < rows.length}
                                     checked={selectedRows.size === rows.length}
@@ -105,14 +102,17 @@ const DataTable:React.FC<DataTableProps> = ({setShowNavigation}) => {
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell align="left">
-                                    <Checkbox
-                                        checked={isSelected(index)}
-                                        onChange={() => handleSelectRow(index)}
-                                    />
+                                <TableCell align="left" className='check-box-cell'>
+                                    <div className='check-box-cmpny'>
+                                        <Checkbox
+                                            checked={isSelected(index)}
+                                            onChange={() => handleSelectRow(index)}
+                                        />
+                                        <img src={DummyCompLogo}></img>
+                                    </div>
                                 </TableCell>
-                                <TableCell component="th" scope="row" id='company'>
-                                    <div onClick={()=>navigate(routes.overView)}>
+                                <TableCell component="th" scope="row" className='cmpny-cell' id='company'>
+                                    <div onClick={() => navigate(routes.overView)}>
                                         {trimString(row.company, 15)}
                                     </div>
                                 </TableCell>

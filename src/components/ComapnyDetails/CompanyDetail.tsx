@@ -55,21 +55,25 @@ const CompanyDetail: React.FC<CompanyDetailsProps> = ({
                     logo={FacebookURL}
                     title='Facebook'
                     desc={fbURL}
+                    isClickable={true}
                 />
                 <Properties
                     logo={InstaURL}
                     title='Instagram'
                     desc={instaURL}
+                    isClickable={true}
                 />
                 <Properties
                     logo={TwtURL}
                     title='Twitter'
                     desc={twtURL}
+                    isClickable={true}
                 />
                 <Properties
                     logo={LkdURL}
                     title='LinkedIn'
                     desc={lkdURL}
+                    isClickable={true}
                 />
                 <Properties
                     logo={Location}

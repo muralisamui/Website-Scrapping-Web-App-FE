@@ -39,8 +39,8 @@ export const AvatarBox: React.FC<AvatarProps> = ({ avatarURL, companyName, desc 
                     />
                 </Box>
             </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
-                <Box>
+            <Grid item xs={isMobile ? 12 : 4} className="ph-email-cell">
+                <Box className='ph-and-email-cont'>
                     <Properties
                         logo={Phone}
                         title='Phone'

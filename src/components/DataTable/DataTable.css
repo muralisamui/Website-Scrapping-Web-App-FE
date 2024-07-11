@@ -6,6 +6,19 @@
     color:#334155;
     font-weight: 500;
 }
+.check-box-cell{
+    padding-inline: 0px !important;
+}
+
+.cmpny-cell{
+    padding-inline: 10px !important;
+}
+.check-box-cmpny{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .bttn-and-count{
     display: flex;

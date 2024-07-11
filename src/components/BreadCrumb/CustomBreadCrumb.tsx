@@ -3,21 +3,30 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 // import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ChevronRight from '../../assets/ChevronRight.svg'
-
-function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    event.preventDefault();
-    console.info('You clicked a breadcrumb.');
-}
+import { useLocation, useNavigate } from 'react-router-dom';
+import { routes } from '../../routes/routes';
 
 const CustomBreadCrumb = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleClick = (
+        event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        url: string
+    ) => {
+        event.preventDefault();
+        if (location.pathname !== url) {
+            navigate(url)
+        }
+    }
     const breadcrumbs = [
         <Link
             underline="hover"
             key="1"
             color="inherit"
             href="/"
-            onClick={handleClick}
-            sx={{fontWeight:600}}
+            onClick={(e) => handleClick(e, routes.home)}
+            sx={{ fontWeight: 600 }}
         >
             Home
         </Link>,
@@ -26,8 +35,8 @@ const CustomBreadCrumb = () => {
             key="2"
             color="inherit"
             href="/material-ui/getting-started/installation/"
-            onClick={handleClick}
-            sx={{fontWeight:600}}
+            onClick={(e) => handleClick(e, routes.overView)}
+            sx={{ fontWeight: 600 }}
         >
             Netflix
         </Link>
@@ -37,7 +46,7 @@ const CustomBreadCrumb = () => {
         <Breadcrumbs
             aria-label="breadcrumb"
             separator={
-                <img src={ChevronRight}/>
+                <img src={ChevronRight} />
             }
         >
             {breadcrumbs}
