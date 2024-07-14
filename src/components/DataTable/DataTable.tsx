@@ -19,12 +19,14 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '../../routes/routes';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteCompany, getCompanyTableData } from '../../hooks/companyTable.api';
+import TransitionsModal from '../Modal/TransitionsModal';
 
 
 const DataTable = () => {
     const columnsHeadings = ['COMPANY', 'SOCIAL PROFILES', 'DESCRIPTION', 'ADDRESS', 'PHONE NO.', 'EMAIL']
     const [selectedRows, setSelectedRows] = useState(new Set());
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const { copyToClipboard, renderAlert } = useCopyToClipboard();
     const navigate = useNavigate();
     const queryClient = useQueryClient()
@@ -45,7 +47,10 @@ const DataTable = () => {
     });
 
     if (isLoading) return <div>Loading....</div>
-    if (error) return <div>{error.message}</div>
+    const handleCloseModal = () => {
+        setErrorMessage(null);
+    };
+    if (error) return <TransitionsModal message={error.message} onClose={handleCloseModal} isOpen={!!errorMessage} />
     const companies = data.items;
     const meta = data.meta;
 
