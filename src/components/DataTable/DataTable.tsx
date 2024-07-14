@@ -5,7 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Checkbox } from '@mui/material';
+import { Button, Checkbox, Pagination, Typography } from '@mui/material';
 import { useState } from 'react';
 import Facebook from '../../assets/Facebook.svg'
 import Twitter from '../../assets/Twitter.svg'
@@ -15,50 +15,29 @@ import ExportCSV from '../../assets/ExportCSV.svg'
 import DummyCompLogo from '../../assets/DummyCompLogo.png'
 import './DataTable.css'
 import { trimString, useCopyToClipboard } from '../../hooks/hooks';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { routes } from '../../routes/routes';
 import { useQuery } from '@tanstack/react-query';
-import { getCompanyData } from '../../hooks/companyTable.api';
+import { getCompanyTableData } from '../../hooks/companyTable.api';
 
-// function createData(
-//     company: string,
-//     social: any,
-//     desc: string,
-//     address: string,
-//     phNo: string,
-//     email: string
-// ) {
-//     return { company, social, desc, address, phNo, email };
-// }
-
-// const rows = [
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted collaboration tools: including video...`, 'San Francisco, United States', '(573)-467-7494', 'contact@airbnb.com'),
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted collaboration tools: including video...`, 'San Francisco, United Stdfgdfgdgdates', '(573)-467-7494', 'contact@airbnb.com'),
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted collaboration tools: including video...`, 'San Francisco, United States', '(573)-467-7494', 'contact@airbnb.com'),
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted khsdgbfkjshdbgfkhbsdjkfhbsdhfjksdbfhsbdjfhvbsdjkhfjksh collaboration tools: including video...`, 'San Francisco, United States', '(573)-', 'contact@airbnb.com'),
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted collaboration tools: including video...`, 'San Francisco, United States', '(573)-467-735454-494', 'contact@airbnb.com'),
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted collaboration tools: including video...`, 'San Francisco, United States', '(573)-467-7494', 'contact@airbnb.com'),
-//     createData('Airbnb', 159, `Modernize workflows with Zoom's trusted collaboration tools: including video...`, 'San Francisco, United States', '(573)-467-7494', 'contsfgsgsdsact@airbnb.com'),
-
-// ];
-
-const columnsHeadings = ['COMPANY', 'SOCIAL PROFILES', 'DESCRIPTION', 'ADDRESS', 'PHONE NO.', 'EMAIL']
 
 const DataTable = () => {
+    const columnsHeadings = ['COMPANY', 'SOCIAL PROFILES', 'DESCRIPTION', 'ADDRESS', 'PHONE NO.', 'EMAIL']
     const [selectedRows, setSelectedRows] = useState(new Set());
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const { copyToClipboard, renderAlert } = useCopyToClipboard();
     const navigate = useNavigate();
 
-    // api calls
+    // api calls using react-query
     const { isLoading, error, data } = useQuery({
-        queryKey: ['companies'],
-        queryFn: getCompanyData
+        queryKey: ['companies', { currentPage }],
+        queryFn: () => getCompanyTableData(1, 5), // Initial fetch for page 1 and limit 10
     })
 
     if (isLoading) return <div>Loading....</div>
     if (error) return <div>{error.message}</div>
     const companies = data.items;
-
+    const meta = data.meta;
 
     const handleSelectAll = (event: any) => {
         if (event.target.checked) {
@@ -129,7 +108,7 @@ const DataTable = () => {
                                     </div>
                                 </TableCell>
                                 <TableCell component="th" scope="row" className='cmpny-cell' id='company'>
-                                    <div onClick={() => navigate(routes.overView)}>
+                                    <div onClick={() => navigate(`${routes.overView}/${company?.name}/${company?.id}`)}>
                                         {trimString(company?.name, 15)}
                                     </div>
                                 </TableCell>
@@ -179,6 +158,31 @@ const DataTable = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            {/* <Paper className='pagination-container'>
+                <Typography className='pagination-text'>
+                    Showing <span style={{ fontWeight: '600' }}>2-{companies.length}</span > of <span style={{ fontWeight: '600' }}>1000</span>
+                </Typography>
+                <Pagination
+                    count={10}
+                    variant="outlined"
+                    shape="rounded"
+                    className='pagination-count'
+                    onChange={()=>handleChangePage()}
+                />
+            </Paper> */}
+            <Paper className='pagination-container'>
+                <Typography className='pagination-text'>
+                    Showing <span style={{ fontWeight: '600' }}>{meta.currentPage * meta.itemsPerPage - (meta.itemsPerPage - 1)}-{Math.min(meta.currentPage * meta.itemsPerPage, meta.totalItems)}</span > of <span style={{ fontWeight: '600' }}>{meta.totalItems}</span>
+                </Typography>
+                <Pagination
+                    count={meta.totalPages}
+                    page={meta.currentPage}
+                    onChange={() => setCurrentPage(meta.currentPage)}
+                    variant="outlined"
+                    shape="rounded"
+                    className='pagination-count'
+                />
+            </Paper>
             {renderAlert()}
         </>
     );

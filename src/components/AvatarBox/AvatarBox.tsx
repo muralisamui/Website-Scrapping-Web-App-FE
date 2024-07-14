@@ -9,9 +9,11 @@ interface AvatarProps {
     avatarURL: string
     companyName: string
     desc: string
+    phone: string | number
+    email: string
 }
 
-export const AvatarBox: React.FC<AvatarProps> = ({ avatarURL, companyName, desc }) => {
+export const AvatarBox: React.FC<AvatarProps> = ({ avatarURL, companyName, desc, phone, email }) => {
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -44,12 +46,12 @@ export const AvatarBox: React.FC<AvatarProps> = ({ avatarURL, companyName, desc 
                     <Properties
                         logo={Phone}
                         title='Phone'
-                        desc='(573)-456-4644'
+                        desc={phone}
                     />
                     <Properties
                         logo={Mail}
                         title='Mail'
-                        desc='contact@netflix.com'
+                        desc={email}
                     />
                 </Box>
             </Grid>

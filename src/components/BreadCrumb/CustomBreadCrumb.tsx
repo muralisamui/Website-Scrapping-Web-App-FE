@@ -3,12 +3,14 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 // import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ChevronRight from '../../assets/ChevronRight.svg'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { routes } from '../../routes/routes';
 
 const CustomBreadCrumb = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const params = useParams();
+    const { id, company } = params;
 
     const handleClick = (
         event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -35,10 +37,10 @@ const CustomBreadCrumb = () => {
             key="2"
             color="inherit"
             href="/material-ui/getting-started/installation/"
-            onClick={(e) => handleClick(e, routes.overView)}
+            onClick={(e) => handleClick(e, `${routes.overView}/${company}/${id}`)}
             sx={{ fontWeight: 600 }}
         >
-            Netflix
+            {company}
         </Link>
     ];
 
