@@ -10,3 +10,11 @@ export const getCompanyTableData = async (page: number, limit: number) => {
         throw new Error(`Error fetching company data: ${error.message}`);
     }
 }
+
+export const deleteCompany = async (id: number) => {
+    try {
+        await axios.delete(`${BASE_URL}/company-details/${id}`);
+    } catch (error: any) {
+        throw new Error(`Error deleting company data: ${error.message}`);
+    }
+};

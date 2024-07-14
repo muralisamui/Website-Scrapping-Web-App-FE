@@ -17,8 +17,8 @@ import './DataTable.css'
 import { trimString, useCopyToClipboard } from '../../hooks/hooks';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../routes/routes';
-import { useQuery } from '@tanstack/react-query';
-import { getCompanyTableData } from '../../hooks/companyTable.api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteCompany, getCompanyTableData } from '../../hooks/companyTable.api';
 
 
 const DataTable = () => {
@@ -27,12 +27,22 @@ const DataTable = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const { copyToClipboard, renderAlert } = useCopyToClipboard();
     const navigate = useNavigate();
+    const queryClient = useQueryClient()
 
     // api calls using react-query
     const { isLoading, error, data } = useQuery({
         queryKey: ['companies', { currentPage }],
-        queryFn: () => getCompanyTableData(1, 5), // Initial fetch for page 1 and limit 10
+        queryFn: () => getCompanyTableData(currentPage, 10), // Initial fetch for page 1 and limit 10
     })
+
+    // Mutation for deleting a company record
+    const mutation = useMutation({
+        mutationFn: deleteCompany,
+        onSuccess: () => {
+            // Refetch the company data after deletion
+            queryClient.invalidateQueries({ queryKey: ['companies'] });
+        },
+    });
 
     if (isLoading) return <div>Loading....</div>
     if (error) return <div>{error.message}</div>
@@ -41,7 +51,7 @@ const DataTable = () => {
 
     const handleSelectAll = (event: any) => {
         if (event.target.checked) {
-            const newSelectedRows = new Set(companies.map((_: any, index: number) => index));
+            const newSelectedRows = new Set(companies.map((company: any) => company.id));
             setSelectedRows(newSelectedRows);
         } else {
             setSelectedRows(new Set());
@@ -57,15 +67,29 @@ const DataTable = () => {
         }
         setSelectedRows(newSelectedRows);
     };
-    const isSelected = (index: any) => selectedRows.has(index);
+    const isSelected = (id: any) => selectedRows.has(id);
 
-
+    // Handling page change event to update current page state
+    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+        setCurrentPage(page);
+    };
+    const handleDelete = (ids: Set<number>) => {
+        ids.forEach((el) => {
+            mutation.mutate(el);
+        })
+    };
 
     return (
         <>
             <Paper className='bttn-and-count' elevation={1}>
                 <span className='rows-count-label'>{selectedRows.size} selected</span>
-                <Button className='table-bttns' variant='outlined'>Delete</Button>
+                <Button
+                    className='table-bttns'
+                    variant='outlined'
+                    onClick={() => handleDelete(selectedRows)}
+                >
+                    {selectedRows.size > 1 ? 'Delete All' : 'Delete'}
+                </Button>
                 <Button className='table-bttns' variant='outlined' id='export-csv-btn'>
                     <img src={ExportCSV} />
                     Export as CSV
@@ -98,8 +122,8 @@ const DataTable = () => {
                                 <TableCell align="left" className='check-box-cell'>
                                     <div className='check-box-cmpny'>
                                         <Checkbox
-                                            checked={isSelected(index)}
-                                            onChange={() => handleSelectRow(index)}
+                                            checked={isSelected(company?.id)}
+                                            onChange={() => handleSelectRow(company?.id)}
                                         />
                                         <img
                                             src={company.logo ? company.logo : DummyCompLogo}
@@ -158,18 +182,6 @@ const DataTable = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {/* <Paper className='pagination-container'>
-                <Typography className='pagination-text'>
-                    Showing <span style={{ fontWeight: '600' }}>2-{companies.length}</span > of <span style={{ fontWeight: '600' }}>1000</span>
-                </Typography>
-                <Pagination
-                    count={10}
-                    variant="outlined"
-                    shape="rounded"
-                    className='pagination-count'
-                    onChange={()=>handleChangePage()}
-                />
-            </Paper> */}
             <Paper className='pagination-container'>
                 <Typography className='pagination-text'>
                     Showing <span style={{ fontWeight: '600' }}>{meta.currentPage * meta.itemsPerPage - (meta.itemsPerPage - 1)}-{Math.min(meta.currentPage * meta.itemsPerPage, meta.totalItems)}</span > of <span style={{ fontWeight: '600' }}>{meta.totalItems}</span>
@@ -177,7 +189,7 @@ const DataTable = () => {
                 <Pagination
                     count={meta.totalPages}
                     page={meta.currentPage}
-                    onChange={() => setCurrentPage(meta.currentPage)}
+                    onChange={handlePageChange}
                     variant="outlined"
                     shape="rounded"
                     className='pagination-count'
