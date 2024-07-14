@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Backdrop, Button, Checkbox, CircularProgress, Pagination, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Facebook from '../../assets/Facebook.svg'
 import Twitter from '../../assets/Twitter.svg'
 import LinkedIn from '../../assets/LinkedIn.svg'
