@@ -5,8 +5,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Checkbox, Pagination, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Backdrop, Button, Checkbox, CircularProgress, Pagination, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import Facebook from '../../assets/Facebook.svg'
 import Twitter from '../../assets/Twitter.svg'
 import LinkedIn from '../../assets/LinkedIn.svg'
@@ -21,8 +21,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteCompany, getCompanyTableData } from '../../hooks/companyTable.api';
 import TransitionsModal from '../Modal/TransitionsModal';
 
+interface DataTableProps {
+    setLoading: (loading: boolean) => void;
+}
 
-const DataTable = () => {
+const DataTable: React.FC<DataTableProps> = ({ setLoading }) => {
     const columnsHeadings = ['COMPANY', 'SOCIAL PROFILES', 'DESCRIPTION', 'ADDRESS', 'PHONE NO.', 'EMAIL']
     const [selectedRows, setSelectedRows] = useState(new Set());
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -40,19 +43,24 @@ const DataTable = () => {
     // Mutation for deleting a company record
     const mutation = useMutation({
         mutationFn: deleteCompany,
+        onMutate: () => setLoading(true),
         onSuccess: () => {
             // Refetch the company data after deletion
             queryClient.invalidateQueries({ queryKey: ['companies'] });
-        },
+            setLoading(false)
+        }
     });
 
-    if (isLoading) return <div>Loading....</div>
+    if (isLoading) return (<Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
+        <CircularProgress color="inherit" />
+    </Backdrop>)
+
     const handleCloseModal = () => {
         setErrorMessage(null);
     };
     if (error) return <TransitionsModal message={error.message} onClose={handleCloseModal} isOpen={!!errorMessage} />
-    const companies = data.items;
-    const meta = data.meta;
+    const companies = data?.items;
+    const meta = data?.meta;
 
     const handleSelectAll = (event: any) => {
         if (event.target.checked) {
@@ -86,6 +94,9 @@ const DataTable = () => {
 
     return (
         <>
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isLoading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Paper className='bttn-and-count' elevation={1}>
                 <span className='rows-count-label'>{selectedRows.size} selected</span>
                 <Button
@@ -118,6 +129,7 @@ const DataTable = () => {
                             }
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
                         {companies?.map((company: any, index: number) => (
                             <TableRow

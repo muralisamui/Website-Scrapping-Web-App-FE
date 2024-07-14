@@ -9,23 +9,29 @@ import TransitionsModal from '../Modal/TransitionsModal';
 
 interface SearchBarProps {
     showBreadCrumb: boolean;
+    setLoading: (loading: boolean) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ showBreadCrumb }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ showBreadCrumb, setLoading }) => {
     const [urlString, setURLString] = useState<string>('')
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: scrapeCompanyData,
+        onMutate: () => {
+            setLoading(true)
+        },
         onSuccess: () => {
             // Invalidate and refetch the companies query to refresh the DataTable
             queryClient.invalidateQueries({ queryKey: ['companies'] });
             setURLString('');
+            setLoading(false);
         },
         onError: (error) => {
             setURLString('');
             setErrorMessage(error.message);
+            setLoading(false)
         }
     });
 

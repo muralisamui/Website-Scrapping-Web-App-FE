@@ -11,3 +11,13 @@ export const getCompanyData = async (id: number | string | null) => {
         throw new Error(`Error fetching company data: ${error.message}`);
     }
 }
+
+export const getScreenShotImage = async (id: number | string | null) => {
+    if (id === null || undefined) return ''
+    try {
+        const resp = await axios.get(`${BASE_URL}/company-details/${id}/screenshot`);
+        return resp.data;
+    } catch (error: any) {
+        throw new Error(`Error fetching company data: ${error.message}`);
+    }
+}
