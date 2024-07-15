@@ -36,6 +36,7 @@ export const useCopyToClipboard = () => {
 };
 
 export function trimString(input: string, maxLength: number, addEllipsis: boolean = true): string {
+    if(!input) return '';
     if (input.length <= maxLength) {
         return input;
     }

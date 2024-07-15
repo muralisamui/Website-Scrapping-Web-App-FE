@@ -9,7 +9,7 @@ const router = createBrowserRouter([
         element: <Home/>
     },
     {
-        path: routes.overView,
+        path: `${routes.overView}/:company/:id`,
         element: <OverView/>
     }
 ])

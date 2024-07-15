@@ -4,7 +4,7 @@ import './Properties.css'
 interface Propertyprops {
     logo: any
     title: string
-    desc: string
+    desc: string | number
     isClickable?: boolean
 }
 export const Properties: React.FC<Propertyprops> = ({ logo, title, desc, isClickable }) => {
